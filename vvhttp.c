@@ -89,6 +89,9 @@ static esp_err_t control_get_handler(httpd_req_t *req)
         case 'a':
             vv_set_running(1);
         break;
+        case 'v':
+            vv_save_duty();
+        break;
         case 'm':
             vv_duty[VV_IDX_PUMP] = s22u(p+3);
             vv_start_duty();
@@ -118,6 +121,7 @@ static const httpd_uri_t uri_conf_json = {
 
 /* /control/stop 
    /control/start 
+   /control/save
    /control/pump/12
    /control/fan/22
  */
