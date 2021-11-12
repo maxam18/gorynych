@@ -30,7 +30,7 @@ esp_err_t vv_restore_duty()
     nvs_handle  store;
     esp_err_t   err;
 
-    err = nvs_open("vvowen", NVS_READONLY, &store);
+    err = nvs_open("vvduty", NVS_READONLY, &store);
     if (err != ESP_OK)
     {
         me_debug("DUTY", "Warning (%s) opening NVS handle. Using defaults.", esp_err_to_name(err));
@@ -42,6 +42,8 @@ esp_err_t vv_restore_duty()
 #ifdef CONFIG_ME_DEBUG
     if( err != ESP_OK )
         me_debug("DUTY", "pump duty read error (%s).", esp_err_to_name(err));
+    else
+        me_debug("DUTY", "successfuly read from storage");
 #endif
 
     nvs_close(store);
@@ -53,7 +55,7 @@ esp_err_t vv_save_duty()
     nvs_handle  store;
     esp_err_t   err;
 
-    err = nvs_open("my_esp", NVS_READWRITE, &store);
+    err = nvs_open("vvduty", NVS_READWRITE, &store);
     if (err != ESP_OK)
     {
         me_debug("DUTY", "Error (%s) opening NVS handle!", esp_err_to_name(err));
@@ -64,7 +66,9 @@ esp_err_t vv_save_duty()
     err += nvs_set_i8(store, "pump", vv_duty[VV_IDX_PUMP]);
 #ifdef CONFIG_ME_DEBUG
     if( err != ESP_OK )
-        me_debug("DUTY", "pump duty write error (%s).", esp_err_to_name(err));
+        me_debug("DUTY", "storage write error (%s).", esp_err_to_name(err));
+    else
+        me_debug("DUTY", "successfuly written to storage");
 #endif
     nvs_close(store);
 

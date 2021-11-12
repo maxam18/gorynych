@@ -13,6 +13,7 @@
 
 #include "font8x8_128LC.h"
 
+#include <me_debug.h>
 #include <gorynych.h>
 #include <vvduty.h>
 #include <vvdisplay.h>
@@ -92,6 +93,7 @@ void vv_disp_update(vv_disp_enum_t what, int8_t val)
 {
     uint8_t     *p = dtext.start + dtext_shift[what] + 8;
 
+me_debug("DISP", "Updating %d with %d", what, val);
     memcpy(p, DISP_FONT['0'+val/10], 8);
     memcpy(p+8, DISP_FONT['0'+val%10], 8);
 }

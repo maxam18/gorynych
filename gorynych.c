@@ -171,8 +171,8 @@ static void vvowen_task(void *ign)
             ESP_LOGI(TAG, "BME update. Temp: %d, Humid: %d."
                         , bme280_data.temperature
                         , bme280_data.humidity);
-            vv_disp_update(VV_SHOW_TEMP, (int8_t )bme280_data.temperature/100);
-            vv_disp_update(VV_SHOW_RH, (int8_t )bme280_data.humidity/1024);
+            vv_disp_update(VV_SHOW_TEMP, bme280_data.temperature/100);
+            vv_disp_update(VV_SHOW_RH, bme280_data.humidity/1024);
         }
     }
 }
@@ -209,8 +209,8 @@ void gorynych(void)
     vv_disp_init();
     
     vv_restore_duty();
-    vv_disp_update(VV_IDX_FAN, vv_duty[0]);
-    vv_disp_update(VV_IDX_PUMP, vv_duty[1]);
+    vv_disp_update(VV_SHOW_FAN, vv_duty[VV_IDX_FAN]);
+    vv_disp_update(VV_SHOW_PUMP, vv_duty[VV_IDX_PUMP]);
 
     ESP_ERROR_CHECK(esp_netif_init());
     ESP_ERROR_CHECK(esp_event_loop_create_default());
