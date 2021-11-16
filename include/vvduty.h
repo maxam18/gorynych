@@ -9,17 +9,20 @@
 #define _VVDUTY_H
 
 #include <esp_system.h>
+#include "driver/mcpwm.h"
 
 enum vv_duty_index { VV_IDX_FAN, VV_IDX_PUMP };
 extern int8_t vv_duty[];
+extern int8_t vv_running;
 
-esp_err_t vv_save_duty();
-esp_err_t vv_restore_duty();
+#define vv_duty_run()       (vv_running == 1)
+
+esp_err_t vv_duty_save();
+esp_err_t vv_duty_restore();
 void vv_change_duty(enum vv_duty_index idx, int8_t step);
-void vv_reset_duty();
-#define vv_start_duty vv_reset_duty
-void vv_stop_duty();
 void vv_duty_init(void);
+void vv_duty_start(void);
+void vv_duty_stop(void);
 
 #endif
 

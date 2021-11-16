@@ -9,11 +9,13 @@
 #define _VVDISPLAY_H
 
 typedef enum { 
+    VV_SHOW_MIN,
     VV_SHOW_ON,
     VV_SHOW_FAN, 
     VV_SHOW_PUMP, 
     VV_SHOW_TEMP, 
-    VV_SHOW_RH
+    VV_SHOW_RH,
+    VV_SHOW_MAX
 } vv_disp_enum_t;
 
 void vv_disp_set(vv_disp_enum_t what);

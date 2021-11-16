@@ -47,8 +47,9 @@ static vv_dtext_t        dtext;
 
 #define DISP_FONT        font8x8_128LC
 #define DISP_DEF_TEXT    "Off B00 H00 T00 R00   "
+// VV_SHOW_ MIN, ON, FAN, PUMP, TEMP, RH, MAX
 static uint8_t           dtext_shift[] = {
-    0, 4*8, 8*8, 12*8, 16*8, 20*8
+    0, 0, 4*8, 8*8, 12*8, 16*8, 16*8
 };
 
 static void text_init(const char *text)

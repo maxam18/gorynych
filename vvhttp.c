@@ -39,7 +39,7 @@ static size_t make_rep(char *buf, size_t len)
                         , vv_duty[VV_IDX_FAN], vv_duty[VV_IDX_PUMP]
                         , (double)bme280_data.temperature/100.0
                         , (double)bme280_data.humidity/1024.0
-                        , vv_get_running() ? status[1] : status[0]
+                        , vv_duty_run() ? status[1] : status[0]
                         );
 }
 
@@ -84,21 +84,21 @@ static esp_err_t control_get_handler(httpd_req_t *req)
     switch( *p )
     {
         case 'o':
-            vv_set_running(0);
+            vv_disp_update_run(0);
+            vv_duty_stop();
         break;
         case 'a':
-            vv_set_running(1);
+            vv_disp_update_run(1);
+            vv_duty_start();
         break;
         case 'v':
-            vv_save_duty();
+            vv_duty_save();
         break;
         case 'm':
             vv_duty[VV_IDX_PUMP] = s22u(p+3);
-            vv_start_duty();
         break;
         case 'n':
             vv_duty[VV_IDX_FAN] = s22u(p+2);
-            vv_start_duty();
         break;
     }
 

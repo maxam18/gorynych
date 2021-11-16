@@ -14,8 +14,6 @@
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 #include "esp_log.h"
-#include "driver/adc.h"
-#include "driver/mcpwm.h"
 
 #include <vvduty.h>
 #include <me_debug.h>
@@ -25,7 +23,9 @@
 
 int8_t  vv_duty[2] = { 0, 0 };
 
-esp_err_t vv_restore_duty()
+int8_t  vv_running = 0;
+
+esp_err_t vv_duty_restore()
 {
     nvs_handle  store;
     esp_err_t   err;
@@ -50,7 +50,7 @@ esp_err_t vv_restore_duty()
     return err;
 }
 
-esp_err_t vv_save_duty()
+esp_err_t vv_duty_save()
 {
     nvs_handle  store;
     esp_err_t   err;
@@ -75,16 +75,18 @@ esp_err_t vv_save_duty()
     return err;
 }
 
-void vv_reset_duty()
+void vv_duty_start()
 {
     mcpwm_set_duty(MCPWM_UNIT_0, MCPWM_TIMER_0, MCPWM_OPR_A, vv_duty[0]);
     mcpwm_set_duty(MCPWM_UNIT_0, MCPWM_TIMER_0, MCPWM_OPR_B, vv_duty[1]);
+    vv_running = 1;
 }
 
-void vv_stop_duty()
+void vv_duty_stop()
 {
     mcpwm_set_duty(MCPWM_UNIT_0, MCPWM_TIMER_0, MCPWM_OPR_A, 0);
     mcpwm_set_duty(MCPWM_UNIT_0, MCPWM_TIMER_0, MCPWM_OPR_B, 0);
+    vv_running = 0;
 }
 
 void vv_change_duty(enum vv_duty_index idx, int8_t step)
@@ -100,8 +102,9 @@ void vv_change_duty(enum vv_duty_index idx, int8_t step)
         val = 0;
     
     vv_duty[idx] = val;
-    
-    mcpwm_set_duty(MCPWM_UNIT_0, MCPWM_TIMER_0, gen[idx], val);
+
+    if( vv_duty_run() )
+        mcpwm_set_duty(MCPWM_UNIT_0, MCPWM_TIMER_0, gen[idx], val);
 }
 
 void vv_duty_init(void)
@@ -119,5 +122,5 @@ void vv_duty_init(void)
     mcpwm_init(MCPWM_UNIT_0, MCPWM_TIMER_0, &pwm_conf);
     mcpwm_set_duty(MCPWM_UNIT_0, MCPWM_TIMER_0, MCPWM_OPR_A, 0);
     mcpwm_set_duty(MCPWM_UNIT_0, MCPWM_TIMER_0, MCPWM_OPR_B, 0);
-    mcpwm_start(MCPWM_UNIT_0, MCPWM_TIMER_0);
+    //mcpwm_start(MCPWM_UNIT_0, MCPWM_TIMER_0);
 }
